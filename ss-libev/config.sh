@@ -6,6 +6,7 @@
 # for shadowsocks config.json
 SS_PORT=${SS_PORT:=8388}
 SS_PASS=${SS_PASS:="secret"}
+SS_ENCRYPT=${SS_ENCRYPT:="chacha20"}
 
 cat > /etc/ss-config.json <<EOF
 {
@@ -15,7 +16,7 @@ cat > /etc/ss-config.json <<EOF
     "local_address": "127.0.0.1",
     "local_port": 1080,
     "timeout": 150,
-    "method": "chacha20",
+    "method": "${SS_ENCRYPT}",
     "fast_open": true,
     "mode": "tcp_and_udp",
     "plugin":"obfs-server",
