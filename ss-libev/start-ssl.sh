@@ -4,11 +4,11 @@
 #
 
 # for shadowsocks config.json
-SS_PORT=${SS_PORT:=8388}
+SS_PORT=${SS_PORT:=12311}
 SS_PASS=${SS_PASS:="secret"}
 SS_ENCRYPT=${SS_ENCRYPT:="chacha20"}
 
-cat > /etc/ss-config.json <<EOF
+cat > /etc/ssl-config.json <<EOF
 {
     "server": "0.0.0.0",
     "server_port" : ${SS_PORT},
@@ -23,3 +23,5 @@ cat > /etc/ss-config.json <<EOF
     "plugin_opts":"obfs=tls"
 }
 EOF
+
+ss-server -c /etc/ssl-config.json
