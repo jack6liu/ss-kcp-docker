@@ -2,8 +2,8 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-LABEL       shadowsocks-libev="3.0.8"
-ENV         SS_PORT=${SS_PORT:-"8388"}
+ENV         SS_PORT=${SS_PORT:-"8388"}              \
+            SS_VER=${SS_VER:-"3.0.8"}
 COPY        ./config.sh /config.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \
@@ -14,10 +14,10 @@ RUN         apk update &&                           \
             asciidoc xmlto                          \
             build-base linux-headers git &&         \
             cd / &&                                 \
-            curl -k -L -O https://github.com/shadowsocks/shadowsocks-libev/releases/download/v3.0.8/shadowsocks-libev-3.0.8.tar.gz && \
-            tar -zxf shadowsocks-libev-3.0.8.tar.gz && \
-            rm -f shadowsocks-libev-3.0.8.tar.gz && \
-            cd shadowsocks-libev-3.0.8 &&           \
+            curl -k -L -O https://github.com/shadowsocks/shadowsocks-libev/releases/download/v${SS_VER}/shadowsocks-libev-${SS_VER}.tar.gz && \
+            tar -zxf shadowsocks-libev-${SS_VER}.tar.gz && \
+            rm -f shadowsocks-libev-${SS_VER}.tar.gz &&    \
+            cd shadowsocks-libev-${SS_VER} &&              \
             ./configure && make && make install &&  \
             cd / &&                                 \
             git clone https://github.com/shadowsocks/simple-obfs.git && \
