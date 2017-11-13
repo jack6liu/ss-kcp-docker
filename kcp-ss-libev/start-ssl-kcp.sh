@@ -4,18 +4,19 @@
 #
 
 # for shadowsocks config.json
-SS_PORT=${SS_PORT:=8388}
-SS_PASSWORD=${SS_PASSWORD:="secret"}
+SS_PORT=${SS_PORT:=12411}
+SS_PASS=${SS_PASS:="secret"}
+SS_ENCRYPT=${SS_ENCRYPT:="chacha20"}
 
-cat > /etc/ss-server-config.json <<EOF
+cat > /etc/ssl-config.json <<EOF
 {
     "server": "0.0.0.0",
     "server_port" : ${SS_PORT},
-    "password": "${SS_PASSWORD}",
+    "password": "${SS_PASS}",
     "local_address": "127.0.0.1",
     "local_port": 1080,
     "timeout": 150,
-    "method": "chacha20",
+    "method": "${SS_ENCRYPT}",
     "fast_open": true,
     "mode": "tcp_and_udp",
     "plugin":"obfs-server",
@@ -25,8 +26,8 @@ EOF
 
 # for kcptun config.json
 KCP_PORT=${KCP_PORT:="28388"}
-KCP_KEY=${KCP_KEY:="${SS_PASSWORD}"}
-KCP_CRYPT=${KCP_CRYPT:="salsa20"}
+KCP_KEY=${KCP_KEY:="${SS_PASS}"}
+KCP_ENCRYPT=${KCP_ENCRYPT:="${SS_ENCRYPT}"}
 KCP_MODE=${KCP_MODE:="fast2"}
 KCP_MTU=${KCP_MTU:="1350"}
 KCP_SNDWND=${KCP_SNDWND:="1024"}
@@ -43,12 +44,12 @@ KCP_NC=${KCP_NC:="0"}
 KCP_SOCKBUF=${KCP_SOCKBUF:="4194304"}
 KCP_KEEPALIVE=${KCP_KEEPALIVE:="10"}
 
-cat > /etc/kcp-server-config.json <<EOF
+cat > /etc/kcp-config.json <<EOF
 {
     "listen": "0.0.0.0:${KCP_PORT}",
     "target": "127.0.0.1:${SS_PORT}",
     "key": "${KCP_KEY}",
-    "crypt": "${KCP_CRYPT}",
+    "crypt": "${KCP_ENCRYPT}",
     "mode": "${KCP_MODE}",
     "mtu": ${KCP_MTU},
     "sndwnd": ${KCP_SNDWND},
@@ -66,3 +67,7 @@ cat > /etc/kcp-server-config.json <<EOF
     "keepalive": ${KCP_KEEPALIVE}
 }
 EOF
+
+# start shadowsocks-libev and kcptun-server
+ss-server -c /etc/ssl-config.json 2>&1 &
+kcp-server -c /etc/kcp-config.json 2>&1

@@ -2,38 +2,39 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-LABEL       shadowsocks-libev="3.0.6"               \
-            kcptun="20170525"
-ENV         SS_PORT=${SS_PORT:-"8388"}              \
-            KCP_PORT=${KCP_PORT:-"28388"}
-COPY        ./kcp-ss-libev/ /kcp-ss-libev/
+ENV         SS_VER="3.1.0"                          \
+            KCP_VER="20171021"
+COPY        ./start-ssl-kcp.sh /start-ssl-kcp.sh
 RUN         apk update &&                           \
-            apk --no-cache add bash wget vim        \
-            autoconf automake libtool               \
-            gettext mbedtls-dev libsodium-dev       \
-            pcre-dev libev-dev udns-dev             \
-            asciidoc xmlto                          \
-            build-base linux-headers git &&         \
+            apk upgrade &&                          \
+            apk add bash curl                       \
+                autoconf automake libtool           \
+                gettext mbedtls-dev libsodium-dev   \
+                pcre-dev libev-dev udns-dev         \
+                asciidoc xmlto c-ares-dev           \
+                build-base linux-headers git &&     \
             cd / &&                                 \
-            wget --no-check-certificate -c https://github.com/shadowsocks/shadowsocks-libev/releases/download/v3.0.6/shadowsocks-libev-3.0.6.tar.gz && \
-            tar -zxf shadowsocks-libev-3.0.6.tar.gz && \
-            rm -f shadowsocks-libev-3.0.6.tar.gz && \
-            cd shadowsocks-libev-3.0.6 &&           \
+            curl -k -L -O https://github.com/shadowsocks/shadowsocks-libev/releases/download/v${SS_VER}/shadowsocks-libev-${SS_VER}.tar.gz &&  \
+            tar -zxf shadowsocks-libev-${SS_VER}.tar.gz &&     \
+            cd shadowsocks-libev-${SS_VER} &&       \
             ./configure && make && make install &&  \
             cd / &&                                 \
             git clone https://github.com/shadowsocks/simple-obfs.git && \
             cd simple-obfs &&                       \
-            git submodule update --init --recursive && \
+            git submodule update --init --recursive &&         \
             ./autogen.sh && ./configure &&          \
             make && make install &&                 \
             cd / &&                                 \
-            wget --no-check-certificate  -c https://github.com/xtaci/kcptun/releases/download/v20170525/kcptun-linux-amd64-20170525.tar.gz && \
-            tar -zxf kcptun-linux-amd64-20170525.tar.gz &&     \
+            curl -k -L -O https://github.com/xtaci/kcptun/releases/download/v${KCP_VER}/kcptun-linux-amd64-${KCP_VER}.tar.gz &&   \
+            tar -zxf kcptun-linux-amd64-${KCP_VER}.tar.gz &&   \
             mv server_linux_amd64 /usr/local/bin/kcp-server && \
             mv client_linux_amd64 /usr/local/bin/kcp-client && \
-            rm -f kcptun-linux-amd64-20170525.tar.gz && \
-            chmod +x /kcp-ss-libev/*.sh &&  \
-            bash /kcp-ss-libev/config.sh && \
+            chmod +x /usr/local/bin/kcp-server &&   \
+            chmod +x /usr/local/bin/kcp-client &&   \
+            chmod +x /start-ssl-kcp.sh &&           \
+            rm -rf /shadowsocks-libev-${SS_VER}.tar.gz &&      \
+            rm -rf /shadowsocks-libev-${SS_VER} &&             \
+            rm -rf /simple-obfs &&                             \
+            rm -f kcptun-linux-amd64-${KCP_VER}.tar.gz &&      \
             rm -rf /var/cache/apk/*
-EXPOSE      ${SS_PORT}/tcp ${SS_PORT}/udp ${KCP_PORT}/udp
-ENTRYPOINT  ["/kcp-ss-libev/entrypoint.sh"]
+ENTRYPOINT  ["/start-ssl-kcp.sh"]
