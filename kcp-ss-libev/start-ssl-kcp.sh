@@ -4,7 +4,7 @@
 #
 
 # for shadowsocks config.json
-SS_PORT=${SS_PORT:=12411}
+SS_PORT=${SS_PORT:="12411"}
 SS_PASS=${SS_PASS:="secret"}
 SS_ENCRYPT=${SS_ENCRYPT:="chacha20"}
 
@@ -25,7 +25,7 @@ cat > /etc/ssl-config.json <<EOF
 EOF
 
 # for kcptun config.json
-KCP_PORT=${KCP_PORT:="28388"}
+KCP_PORT=${KCP_PORT:="22411"}
 KCP_KEY=${KCP_KEY:="${SS_PASS}"}
 KCP_ENCRYPT=${KCP_ENCRYPT:="${SS_ENCRYPT}"}
 KCP_MODE=${KCP_MODE:="fast2"}
