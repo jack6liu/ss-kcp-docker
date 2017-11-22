@@ -2,7 +2,7 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-ENV         SS_VER="3.1.0"
+ENV         SS_VER="3.1.1"
 COPY        ./start-ssl.sh /start-ssl.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \

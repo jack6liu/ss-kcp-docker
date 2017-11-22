@@ -2,8 +2,8 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-ENV         SS_VER="3.1.0"                          \
-            KCP_VER="20171021"
+ENV         SS_VER="3.1.1"                          \
+            KCP_VER="20171113"
 COPY        ./start-ssl-kcp.sh /start-ssl-kcp.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \
