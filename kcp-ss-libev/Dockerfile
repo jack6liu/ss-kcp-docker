@@ -3,7 +3,8 @@
 #
 FROM        alpine:3.6
 ENV         SS_VER="3.1.1"                          \
-            KCP_VER="20171113"
+            KCP_VER="20171113"                      \
+            US_VER="20171125.0"
 COPY        ./start-ssl-kcp.sh /start-ssl-kcp.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \
@@ -29,12 +30,19 @@ RUN         apk update &&                           \
             tar -zxf kcptun-linux-amd64-${KCP_VER}.tar.gz &&   \
             mv server_linux_amd64 /usr/local/bin/kcp-server && \
             mv client_linux_amd64 /usr/local/bin/kcp-client && \
+            cd / &&                                 \
+            curl -k -L -O https://github.com/wangyu-/UDPspeeder/releases/download/v2%40${US_VER}/speederv2_binaries.tar.gz &&     \
+            tar -zxf speederv2_binaries.tar.gz &&   \
+            mv speederv2_amd64 /usr/local/bin/speederv2 &&     \
             chmod +x /usr/local/bin/kcp-server &&   \
             chmod +x /usr/local/bin/kcp-client &&   \
+            chmod +x /usr/local/bin/speederv2 &&    \
             chmod +x /start-ssl-kcp.sh &&           \
             rm -rf /shadowsocks-libev-${SS_VER}.tar.gz &&      \
             rm -rf /shadowsocks-libev-${SS_VER} &&             \
             rm -rf /simple-obfs &&                             \
-            rm -f kcptun-linux-amd64-${KCP_VER}.tar.gz &&      \
+            rm -rf /kcptun-linux-amd64-${KCP_VER}.tar.gz &&    \
+            rm -rf /speederv2_* &&                             \
+            rm -rf /version.txt &&                             \
             rm -rf /var/cache/apk/*
 ENTRYPOINT  ["/start-ssl-kcp.sh"]

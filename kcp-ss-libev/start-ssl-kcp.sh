@@ -68,6 +68,12 @@ cat > /etc/kcp-config.json <<EOF
 }
 EOF
 
+US_PORT=${US_PORT:="22412"}
+US_PASS=${US_PASS:="${SS_PASS}"}
+US_MODE=${US_MODE:="0"}
+US_RATE=${US_RATE:="20:10"}
+
 # start shadowsocks-libev and kcptun-server
 ss-server -c /etc/ssl-config.json 2>&1 &
-kcp-server -c /etc/kcp-config.json 2>&1
+kcp-server -c /etc/kcp-config.json 2>&1 &
+speederv2 -s -l "0.0.0.0:${US_PORT}" -r "127.0.0.1:${SS_PORT}" -k "${US_PASS}" --mode ${US_MODE}  -f ${US_RATE}
