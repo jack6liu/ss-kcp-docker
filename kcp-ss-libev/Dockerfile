@@ -3,7 +3,7 @@
 #
 FROM        alpine:3.6
 ENV         SS_VER="3.1.1"                          \
-            KCP_VER="20171113"                      \
+            KCP_VER="20171201"                      \
             US_VER="20171125.0"
 COPY        ./start-ssl-kcp.sh /start-ssl-kcp.sh
 RUN         apk update &&                           \
