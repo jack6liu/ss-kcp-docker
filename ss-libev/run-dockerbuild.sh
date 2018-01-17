@@ -7,7 +7,8 @@ fi
 
 SS_VER=$1
 echo "Shadowsocks-libev version is ${SS_VER}"
-docker build . -t jack6liu/ss-libev:kcp-${SS_VER}
+docker build . --build-arg SS_LIBEV_VER=${SS_VER} \
+               -t jack6liu/ss-libev:kcp-${SS_VER}
 docker tag jack6liu/ss-libev:kcp-${SS_VER} jack6liu/ss-libev:${SS_VER}
 
 docker push jack6liu/ss-libev:kcp-${SS_VER}

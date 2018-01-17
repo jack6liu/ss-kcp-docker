@@ -2,7 +2,8 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-ENV         SS_VER="3.1.2"
+ARG         SS_LIBEV_VER="3.1.2"
+ENV         SSL_VER=${SS_LIBEV_VER}
 COPY        ./start-ssl.sh /start-ssl.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \
@@ -13,10 +14,10 @@ RUN         apk update &&                           \
                 asciidoc xmlto c-ares-dev           \
                 build-base linux-headers git &&     \
             cd / &&                                 \
-            curl -k -L -O https://github.com/shadowsocks/shadowsocks-libev/releases/download/v${SS_VER}/shadowsocks-libev-${SS_VER}.tar.gz &&  \
-            tar -zxf shadowsocks-libev-${SS_VER}.tar.gz && \
-            rm -f shadowsocks-libev-${SS_VER}.tar.gz &&    \
-            cd shadowsocks-libev-${SS_VER} &&       \
+            curl -k -L -O https://github.com/shadowsocks/shadowsocks-libev/releases/download/v${SSL_VER}/shadowsocks-libev-${SSL_VER}.tar.gz &&  \
+            tar -zxf shadowsocks-libev-${SSL_VER}.tar.gz && \
+            rm -f shadowsocks-libev-${SSL_VER}.tar.gz &&    \
+            cd shadowsocks-libev-${SSL_VER} &&      \
             ./configure && make && make install &&  \
             cd / &&                                 \
             git clone https://github.com/shadowsocks/simple-obfs.git && \
@@ -26,8 +27,8 @@ RUN         apk update &&                           \
             make && make install &&                 \
             cd / &&                                 \
             chmod +x /start-ssl.sh &&               \
-            rm -rf /shadowsocks-libev-${SS_VER}.tar.gz &&  \
-            rm -rf /shadowsocks-libev-${SS_VER} &&         \
+            rm -rf /shadowsocks-libev-${SSL_VER}.tar.gz &&  \
+            rm -rf /shadowsocks-libev-${SSL_VER} &&         \
             rm -rf /simple-obfs &&                  \
             rm -rf /var/cache/apk/*
 ENTRYPOINT  ["/start-ssl.sh"]
