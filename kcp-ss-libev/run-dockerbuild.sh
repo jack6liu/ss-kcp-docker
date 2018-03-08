@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ $# != 1 ]]; then
+if [[ $# < 1 ]]; then
    echo "Must specify the shadowsocks-libev [and] KCPTUN [and] UDPSpeeder version"
    echo "format: bash $0 [SS_VER] [KCPTUN_VER] [UDPSPEEDER_VER]"
    echo "like: bash $0 3.1.2 20171201 20171125.0"
