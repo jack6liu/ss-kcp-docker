@@ -1,30 +1,47 @@
 #!/bin/bash
-if [[ $# < 1 ]]; then
-   echo "Must specify the shadowsocks-libev [and] KCPTUN [and] UDPSpeeder version"
-   echo "format: bash $0 [SS_VER] [KCPTUN_VER] [UDPSPEEDER_VER]"
-   echo "like: bash $0 3.1.2 20171201 20171125.0"
-   echo "OR, can only specify shadowsocks-libev version"
-   echo "like: bash $0 3.1.2"
+if [[ -f ./version ]]; then
+   source ./version
+   echo "./version is found and read."
+else
+   echo "./version is not found!!!"
    exit 1
 fi
-SS_VER=$1
-KCP_VER=${KCP_VER:="20171201"}
-USP_VER=${USP_VER:="20171125.0"}
 
-if [[ $# = 3 ]]; then
-    SS_VER=$1
-    KCP_VER=$2
-    USP_VER=$3
+if [[ -z ${SSL_VER} ]]; then
+   echo "Must specify the shadowsocks-libev [and] KCPTUN [and] UDPSpeeder version"
+   echo "Sample of ./version:"
+   echo "SSL_VER=3.2.0"
+   echo "KCP_VER=20180316"
+   echo "USP_VER=20180522.0"
+   exit 1
 fi
 
-echo "Shadowsocks-libev version is ${SS_VER}"
-docker build . --build-arg SS_LIBEV_VER=${SS_VER}   \
+SSL_VER=${SSL_VER:=3.1.3}
+KCP_VER=${KCP_VER:=20180316}
+USP_VER=${USP_VER:=20180522.0}
+
+echo "SSL_VER is ${SSL_VER}"
+echo "KCP_VER is ${KCP_VER}"
+echo "USP_VER is ${USP_VER}"
+
+#exit 0
+
+echo "++++++++ STARTED ++++++++"
+echo ""
+echo "---> Building docker image for SSL+KCP+USP <---"
+echo ""
+docker build . --build-arg SS_LIBEV_VER=${SSL_VER}  \
                --build-arg KCPTUN_VER=${KCP_VER}    \
                --build-arg UDPSPEEER_VER=${USP_VER} \
-               -t jack6liu/ss-libev:us-kcp-${SS_VER}
+               -t jack6liu/ss-libev:kcp-usp-${SSL_VER}
 
-docker push jack6liu/ss-libev:us-kcp-${SS_VER}
+echo "---> Pushing docker image to docker hub <---"
+docker push jack6liu/ss-libev:kcp-usp-${SSL_VER}
 
-docker rmi -f jack6liu/ss-libev:us-kcp-${SS_VER}
+echo "---> Cleaning local docker images <---"
+docker rmi -f jack6liu/ss-libev:kcp-usp-${SSL_VER}
 
-docker pull jack6liu/ss-libev:us-kcp-${SS_VER}
+echo "---> Getting the new built docker image <---"
+docker pull jack6liu/ss-libev:kcp-usp-${SSL_VER}
+
+echo "++++++++ FINISHED ++++++++"

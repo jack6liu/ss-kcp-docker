@@ -2,9 +2,9 @@
 # Dockerfile for shadowsocks-libev on alpine
 #
 FROM        alpine:3.6
-ARG         SS_LIBEV_VER="3.1.2"
-ARG         KCPTUN_VER="20171201"
-ARG         UDPSPEEER_VER="20171125.0"
+ARG         SS_LIBEV_VER="3.1.3"
+ARG         KCPTUN_VER="20180316"
+ARG         UDPSPEEER_VER="20180522.0"
 ENV         SSL_VER=${SS_LIBEV_VER}                 \
             KCP_VER=${KCPTUN_VER}                   \
             USP_VER=${UDPSPEEER_VER} 
@@ -34,7 +34,7 @@ RUN         apk update &&                           \
             mv server_linux_amd64 /usr/local/bin/kcp-server && \
             mv client_linux_amd64 /usr/local/bin/kcp-client && \
             cd / &&                                 \
-            curl -k -L -O https://github.com/wangyu-/UDPspeeder/releases/download/v2%40${USP_VER}/speederv2_binaries.tar.gz &&     \
+            curl -k -L -O https://github.com/wangyu-/UDPspeeder/releases/download/${USP_VER}/speederv2_binaries.tar.gz &&     \
             tar -zxf speederv2_binaries.tar.gz &&   \
             mv speederv2_amd64 /usr/local/bin/speederv2 &&     \
             chmod +x /usr/local/bin/kcp-server &&   \
