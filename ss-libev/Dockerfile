@@ -1,7 +1,7 @@
 #
 # Dockerfile for shadowsocks-libev on alpine
 #
-FROM        alpine:3.6
+FROM        alpine:latest
 ARG         SS_LIBEV_VER="3.1.2"
 ENV         SSL_VER=${SS_LIBEV_VER}
 COPY        ./start-ssl.sh /start-ssl.sh

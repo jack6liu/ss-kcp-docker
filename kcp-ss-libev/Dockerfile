@@ -1,7 +1,7 @@
 #
 # Dockerfile for shadowsocks-libev on alpine
 #
-FROM        alpine:3.6
+FROM        alpine:latest
 ARG         SS_LIBEV_VER="3.1.3"
 ARG         KCPTUN_VER="20180316"
 ARG         UDPSPEEER_VER="20180522.0"
