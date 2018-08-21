@@ -15,12 +15,12 @@ cat > /etc/ssl-config.json <<EOF
     "password": "${SS_PASS}",
     "local_address": "0.0.0.0",
     "local_port": "${LOCAL_PORT}",
-    "timeout": 150,
+    "timeout": 240,
     "method": "${SS_ENCRYPT}",
     "fast_open": true,
     "mode": "tcp_and_udp",
     "plugin":"obfs-server",
-    "plugin_opts":"obfs=tls"
+    "plugin_opts":"obfs=tls;failover=bing.com:443"
 }
 EOF
 
