@@ -13,6 +13,7 @@ echo ""
 
 echo "Shadowsocks-libev version is ${SS_VER}"
 docker build . --build-arg SS_LIBEV_VER=${SS_VER} \
+               --squash \
                -t jack6liu/ss-libev:${SS_VER}
 #docker tag jack6liu/ss-libev:kcp-${SS_VER} jack6liu/ss-libev:${SS_VER}
 
