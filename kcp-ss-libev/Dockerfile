@@ -11,7 +11,7 @@ ENV         SSL_VER=${SS_LIBEV_VER}                 \
 COPY        ./start-ssl-kcp.sh /start-ssl-kcp.sh
 RUN         apk update &&                           \
             apk upgrade &&                          \
-            apk add bash curl                       \
+            apk add bash curl tar gzip              \
                 autoconf automake libtool           \
                 gettext mbedtls-dev libsodium-dev   \
                 pcre-dev libev-dev udns-dev         \
@@ -30,19 +30,19 @@ RUN         apk update &&                           \
             make && make install &&                 \
             cd / &&                                 \
             curl -k -L -O https://github.com/xtaci/kcptun/releases/download/v${KCP_VER}/kcptun-linux-amd64-${KCP_VER}.tar.gz &&    \
-            tar -zxf kcptun-linux-amd64-${KCP_VER}.tar.gz &&   \
+            tar -xvf kcptun-linux-amd64-${KCP_VER}.tar.gz &&   \
             mv server_linux_amd64 /usr/local/bin/kcp-server && \
             mv client_linux_amd64 /usr/local/bin/kcp-client && \
             cd / &&                                 \
-            curl -k -L -O https://github.com/wangyu-/UDPspeeder/releases/download/${USP_VER}/speederv2_binaries.tar.gz &&     \
-            tar -zxf speederv2_binaries.tar.gz &&   \
+            curl -k -L -O https://github.com/wangyu-/UDPspeeder/releases/download/${USP_VER}/speederv2_linux.tar.gz &&             \
+            tar -xvf speederv2_linux.tar.gz    &&   \
             mv speederv2_amd64 /usr/local/bin/speederv2 &&     \
             chmod +x /usr/local/bin/kcp-server &&   \
             chmod +x /usr/local/bin/kcp-client &&   \
             chmod +x /usr/local/bin/speederv2 &&    \
             chmod +x /start-ssl-kcp.sh &&           \
-            rm -rf /shadowsocks-libev-${SSL_VER}.tar.gz &&      \
-            rm -rf /shadowsocks-libev-${SSL_VER} &&             \
+            rm -rf /shadowsocks-libev-${SSL_VER}.tar.gz &&     \
+            rm -rf /shadowsocks-libev-${SSL_VER} &&            \
             rm -rf /simple-obfs &&                             \
             rm -rf /kcptun-linux-amd64-${KCP_VER}.tar.gz &&    \
             rm -rf /speederv2_* &&                             \
